@@ -1,34 +1,28 @@
-import com.sun.glass.ui.Size;
-
-import javax.tools.JavaCompiler;
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Random;
 
-@SuppressWarnings("ALL")
 public class Sortierung {
 
     public static void insertionSort(int[] array) {
         if(array.length < 1)
             return;
 
-        assert array.length >= 1 : "Das Array muss Einträge haben um sortiert zu werden";
+        assert array.length >= 1 : "Das Array muss Eintraege haben um sortiert zu werden";
         //Annahme: Das Array ist auf den Indizes 0 .. 0 sortiert, da nur ein Eintrag
 
-        //Inv: Das Array ist auf dem Indices 1 .. j sortiert
+        //Inv: Das Array ist auf dem Indizes 1 .. j sortiert
         //-> Muss bis j = maxIndex ( array) = array.length - 1 durchgegangen werden
         for (int j = 1; j < array.length; j++) {
-            int key = array[j]; //Aktueller Wert der Zahl am index j, die in das durch Inv. schon sortierte Array
+            int key = array[j]; //Aktueller Wert der Zahl am Index j, die in das durch Inv. schon sortierte Array
                                 //eingeordnet werden soll
-            int i = j -1; //Größter Index des durch Inv. schon sortierten Arrays
+            int i = j -1; //Groester Index des durch Inv. schon sortierten Arrays
 
-            //Inv: Das Array ist sortiert von 1 .. j. Ggf. ist die nächstgrößere Zahl an Key 2-mal hintereinander
+            //Inv: Das Array ist sortiert von 1 .. j. Ggf. ist die naechstgroessere Zahl an Key 2-mal hintereinander
             //vorhanden; Der Wert Key kommt dann nicht im Array vor.
             //i+1 zeigt auf den Index, wo Key einsortiert werden muss (ggf. wenn existent damit auch auf den doppelten Eintrag)
             while (i >= 0 && array[i] > key) {
-               array[i+1] = array[i]; //Falls i größer als Key den Eintrag von i nach rechts verschieben
-               i--;//Für den nächst kleineren Eintrag wiederholen
+               array[i+1] = array[i]; //Falls i groesser als Key den Eintrag von i nach rechts verschieben
+               i--;//Fuer den naechst kleineren Eintrag wiederholen
 
             }
 
