@@ -15,7 +15,7 @@ public class Sortierung {
         for (int j = 1; j < array.length; j++) {
             int key = array[j]; //Aktueller Wert der Zahl am Index j, die in das durch Inv. schon sortierte Array
                                 //eingeordnet werden soll
-            int i = j -1; //Groester Index des durch Inv. schon sortierten Arrays
+            int i = j -1; //Groesster Index des durch Inv. schon sortierten Arrays
 
             //Inv: Das Array ist sortiert von 1 .. j. Ggf. ist die naechstgroessere Zahl an Key 2-mal hintereinander
             //vorhanden; Der Wert Key kommt dann nicht im Array vor.
