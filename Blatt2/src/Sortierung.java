@@ -9,7 +9,7 @@ public class Sortierung {
 	}
 
 	public static void mergeSort(int[] array, int[] tmpArray, int left, int right) {
-		if(left > right) {
+		if(left < right) {
 			int m = (left+right)/2;
 			mergeSort(array, tmpArray, left, m);
 			mergeSort(array, tmpArray, m + 1, right);
@@ -26,9 +26,15 @@ public class Sortierung {
 			if(array[l] > array[r]) {
 				tmpArray[i] = array[r];
 				r++;
+				if(r > right)						//isnt that nice, simple and reduced?
+				while(l <= middle)
+					tmpArray[++i] = array[l++];
 			}else {
 				tmpArray[i] = array[l];
 				l++;
+				if(l > middle)
+				while(r <= right)
+					tmpArray[++i] = array[r++];
 			}
 		}
 	}
