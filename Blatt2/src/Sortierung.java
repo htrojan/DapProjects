@@ -2,7 +2,37 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class Sortierung {
+	
+	public static void mergeSort(int[] array) {
+		int[] tmpArray = new int[array.length];
+		mergeSort(array, tmpArray, 0, array.length -1);
+	}
 
+	public static void mergeSort(int[] array, int[] tmpArray, int left, int right) {
+		if(left > right) {
+			int m = (left+right)/2;
+			mergeSort(array, tmpArray, left, m);
+			mergeSort(array, tmpArray, m + 1, right);
+			merge(array, tmpArray, left, m, right);
+			for(int i = left; i <= right; i++) {
+				array[i] = tmpArray[i];
+			}
+		}
+	}
+	
+	public static void merge(int[] array, int[] tmpArray, int left, int middle, int right) {
+		int l = left, r = middle+1;
+		for(int i = left; i <= right; i++) {
+			if(array[l] > array[r]) {
+				tmpArray[i] = array[r];
+				r++;
+			}else {
+				tmpArray[i] = array[l];
+				l++;
+			}
+		}
+	}
+	
     public static void insertionSort(int[] array) {
         if(array.length < 1)
             return;
@@ -38,7 +68,7 @@ public class Sortierung {
     public static boolean isSorted(int[] array) {
         //Inv: Das Array ist von 0 .. i aufsteigend sortiert
         for (int i = 1; i < array.length; i++) {
-            //Wenn ein vorheriges Element größer ist als ein nachfolgendes ist das Array nicht sortiert
+            //Wenn ein vorheriges Element groesser ist als ein nachfolgendes ist das Array nicht sortiert
             if (array[i-1] > array[i])
                 return false;
         }
@@ -57,7 +87,7 @@ public class Sortierung {
         try {
             size = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            System.out.println("Das übergebene Argument \"size\" war keine Zahl");
+            System.out.println("Das Uebergebene Argument \"size\" war keine Zahl");
             printUsage();
             return;
         }
@@ -70,36 +100,42 @@ public class Sortierung {
         int[] array = new int[size];
         Random generator = new Random();
 
-        String sortMethod;
+        String fillMethod, sortMethod; //@Hendrik: habe deine Variable sortMethod in fillMethod umbenannt, da diese Namensgebung verwirrend war.
 
-        //Wenn keine Angabe mit Zufallszahlen befüllen
-        if (args.length < 2)
-            sortMethod = "rand";
-        else
-            sortMethod = args[1]; //Ansonsten angegebenen Parameter nutzen
-
+        //Wenn keine Angabe mit Zufallszahlen befuellen und Merge Sort benutzen
+        if (args.length < 2) {
+            sortMethod = "merge";
+            fillMethod = "rand";
+        }else if(args.length < 3){ //Wenn nur eine angabe, Parameter nutzen und random Fuellen
+            sortMethod = args[1]; 
+            fillMethod = "rand";
+        }else{
+        	sortMethod = args[1]; // Beide Parameter nutzen
+        	fillMethod = args[2];
+        }
+            
         //Zweiten Parameter parsen
-        switch (sortMethod) {
+        switch (fillMethod) {
             case "rand" :
-                //Inv: array[0 .. i] enthält zufällige Zahlen
+                //Inv: array[0 .. i] enthaelt zufaellige Zahlen
                 for (int i = 0; i < array.length; i++) {
                     array[i] = generator.nextInt();
                 }
                 break;
             case "auf" :
-                //Inv: array[0 .. i] enthält aufsteigende Zahlen von 0 bis i
+                //Inv: array[0 .. i] enthaelt aufsteigende Zahlen von 0 bis i
                 for (int i = 0; i < array.length; i++) {
-                    array[i] = i; //Der momentane Laufindex ist größer als der letzte
+                    array[i] = i; //Der momentane Laufindex ist groesser als der letzte
                 }
                 break;
             case "ab" :
-                //Inv: array[0 .. i] enthält absteigend Zahlen von array.length bis (array.length - i)
+                //Inv: array[0 .. i] enthaelt absteigend Zahlen von array.length bis (array.length - i)
                 for (int i = 0; i < array.length; i++) {
                     array[i] = array.length - i;
                 }
                 break;
             default:
-                //Ungültiger Parameter
+                //Ungueltiger Parameter
                 printUsage();
                 return;
         }
@@ -108,7 +144,15 @@ public class Sortierung {
 
         //Zeitmessung
         start = System.currentTimeMillis();
-        insertionSort(array);
+        switch(sortMethod) {
+        case "insert":  insertionSort(array);
+        				break;
+        case "merge":	mergeSort(array);
+        				break;
+        default:
+        				//Ungueltiger Parameter
+        				printUsage();
+        }
         end = System.currentTimeMillis();
 
         msec = end - start;
@@ -118,7 +162,7 @@ public class Sortierung {
         else
             System.out.println("Feld NICHT sortiert");
 
-        System.out.println("Benötigte Zeit: " + msec + "ms");
+        System.out.println("Benoetigte Zeit: " + msec + "ms");
         if (size <= 100) {
             System.out.println("Feld:");
             System.out.println(Arrays.toString(array));
@@ -127,6 +171,6 @@ public class Sortierung {
     }
 
     public static void printUsage(){
-        System.out.println("Uage: Sortierung size [rand|auf|ab]");
+        System.out.println("Usage: Sortierung size [insert|merge [rand|auf|ab]}]");
     }
 }
