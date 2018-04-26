@@ -205,6 +205,7 @@ public class Sortierung {
         default:
         				//Ungueltiger Parameter
         				printUsage();
+        				return;
         }
         
         end = System.currentTimeMillis();
