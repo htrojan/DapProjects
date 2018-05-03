@@ -54,7 +54,7 @@ public class Sortierung {
 					tmpArray[++i] = array[l++];
 				
 			//Element aus linkem Array einfügen
-			}else {
+			}else{
 				tmpArray[i] = array[l];
 				l++;
 				
@@ -62,6 +62,7 @@ public class Sortierung {
 				if(l > middle)
 				while(r <= right)
 					tmpArray[++i] = array[r++];
+					
 			}
 		}
 	}
@@ -110,7 +111,7 @@ public class Sortierung {
 
         return true;
     }
-
+    	
     public static void main(String[] args) {
         int size;
         
@@ -137,7 +138,7 @@ public class Sortierung {
             System.out.println("size muss > 0 sein");
             return;
         }
-
+        
         int[] array = new int[size];
 
         //Hier sollen die Kommandozeilenparameter spaeter drin stehen
@@ -187,9 +188,9 @@ public class Sortierung {
                 printUsage();
                 return;
         }
-
+        
         long start, end, msec;
-
+        
         //Zeitmessung
         start = System.currentTimeMillis();
         
@@ -209,7 +210,7 @@ public class Sortierung {
         }
         
         end = System.currentTimeMillis();
-
+        
         msec = end - start;
         
         //Sortierversuch geglueckt?
