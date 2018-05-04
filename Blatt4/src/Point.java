@@ -10,6 +10,13 @@ public class Point {
         this.values = values;
     }
 
+    /**
+     * Dient nur zum Klasseninternen Aufruf
+     */
+    private Point(int dimension) {
+        this.dimension = dimension;
+    }
+
     public int getDim() {
         return dimension;
     }
@@ -38,5 +45,38 @@ public class Point {
     }
 
 
+    /**
+     * Berechnet das Skalarprodukt mit dem gegebenen Punkt
+     */
+    public double scalar(Point p) {
+        if (p.dimension != this.dimension)
+            throw new IllegalArgumentException("Can not calculate scalar between points with different dimensions");
+
+        double result = 0.0;
+        for (int i = 0; i < dimension; i++) {
+            result += this.values[i] * p.values[i];
+        }
+
+        return result;
+    }
+
+    /**
+     * Zieht den Punkt p von diesem ab und gibt das Ergebnis als neuen Vektor zurück.
+     *
+     * @param p Der Punkt, der abgezogen wird. Muss die gleiche Dimension wie der aufgerufene Punkt besitzen.
+     * @return Der neue Punkt mit der gleichen Dimension wie p und der Aufrufer
+     */
+    public Point minus(Point p) {
+        if (p.dimension != this.dimension)
+            throw new IllegalArgumentException("Can not calculate scalar between points with different dimensions");
+
+        Point result = new Point(dimension);
+
+        for (int i = 0; i < dimension; i++) {
+            result.values[i] = this.values[i] - p.values[i];
+        }
+
+        return result;
+    }
 }
 
