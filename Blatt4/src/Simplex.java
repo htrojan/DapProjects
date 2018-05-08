@@ -26,23 +26,31 @@ public abstract class Simplex {
     }
 
     /**
-     * Gibt den Umfang des Simplex zurück
+     * Gibt den Umfang des Simplex zurueck
      */
     public double perimeter() {
         Distance d = new EuclidDistance();
         double perimeter = 0;
 
         //Da dimension + 1 Punkte vorhanden ist dimension der letzte Index von points[]
-        //--> Erfüllt da Konstruktor prüft
-        for (int i = 0; i < dimension; i++) {
-            perimeter += d.distance(points[i], points[i + 1]);
+        //--> Erfuellt da Konstruktor prüft
+        //for (int i = 0; i < dimension; i++) {
+        //    perimeter += d.distance(points[i], points[i + 1]);
+        //}
+        
+        
+        //Laueft durch alle Kanten, aber nicht doppelt!
+        for (int i = 0; i <= dimension; i++)
+        for (int j = i; j <= dimension; j++)
+        {
+        	perimeter += d.distance(points[i], points[j]);
         }
 
         return perimeter;
     }
 
     /**
-     * Prüft, ob die angegebenen Punkte ein valider Simplex sind
+     * Prueft, ob die angegebenen Punkte ein valider Simplex sind
      */
     public abstract boolean validate();
 }

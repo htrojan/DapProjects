@@ -1,4 +1,3 @@
-@SuppressWarnings("ALL")
 public class Point {
     private int dimension;
     private double[] values;
@@ -11,10 +10,13 @@ public class Point {
     }
 
     /**
-     * Dient nur zum Klasseninternen Aufruf
+     * Dient nur zum Klasseninternen Aufruf, den du ordentlich verhauen hast in minus()
      */
     private Point(int dimension) {
         this.dimension = dimension;
+        values = new double[dimension];
+        for(double d : values) 
+        	d = 0;
     }
 
     public int getDim() {

@@ -6,7 +6,7 @@ public class EuclidDistance implements Distance {
 
         double result = 0.0;
 
-        //Berechne (xi - yi)^2 für i <= dim(p1, p2)
+        //Berechne (xi - yi)^2 fuer i <= dim(p1, p2)
         for (int i = 0; i < p1.getDim(); i++) {
             result += Math.pow(p1.get(i) - p2.get(i), 2);
         }

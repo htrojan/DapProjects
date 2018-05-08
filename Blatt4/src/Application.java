@@ -1,5 +1,3 @@
-import com.sun.media.sound.AuFileReader;
-
 import java.util.Arrays;
 import java.util.Random;
 
@@ -9,8 +7,15 @@ public class Application {
         Point[] points;
 
         if (args.length == 6) {
-            //Punkte über die Kommandozeile annehmen
-            points = parsePoints(args);
+            //Punkte Ueber die Kommandozeile annehmen
+        	//Und Prueffen ob alles so klappt...
+        	try {
+        		points = parsePoints(args);
+        	}catch(NumberFormatException e) {
+        		System.out.println("Can't decifer numbers...");
+        		printUsage();
+        		return;
+        	}
         } else if (args.length == 0) {
             points = randomPoints();
         } else {
@@ -26,14 +31,14 @@ public class Application {
     }
 
     private static Point[] randomPoints() {
-        final int limit = 1000;
+        final int limit = 1000; //Too cool?
         final Random random = new Random();
 
         Point[] points = new Point[3];
-        //bis 3 da 3 Punkte erzeugt werden müssen
+        //bis 3 da 3 Punkte erzeugt werden muessen
         for (int i = 0; i < 3; i++) {
             //Einen Wertebereich von [0; 2000] durch Verschiebung um -1000
-            //auf [-1000; +1000] verändern
+            //auf [-1000; +1000] veraendern
             double x = random.nextDouble() * limit * 2 - 1000;
             double y = random.nextDouble() * limit * 2 - 1000;
 
