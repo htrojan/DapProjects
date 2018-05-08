@@ -32,11 +32,16 @@ public class ConvexHull {
 
             if (valid) {
             	int index = 0;
+            	//eine Kante mit p1 wurde schon gefunden und eingetragen
+				//Da jede Kante einzigartig ist und die Gerade die Richtung p1 -> p2 aufweist,
+				//muss p2 hinter p1 hinzugefügt werden
             	if((index = l.indexOf(p1)) != -1) {
-            		l.add(index + 1, p2);
+            		l.add(index + 1, p2); //Falls bei index + 1 schon ein Element sitzt wird der rechte Teil der Liste verschoben
+            		//Eine Kante mit p2 wurde schon gefunden und eingetragen
             	}else if((index = l.indexOf(p2)) != -1) {
             		l.add(index, p1);
             	}else {
+            		//Keine Kante mit einem der beiden Punkte wurde gefunden
             		l.add(p1);
             		l.add(p2);
             	}
@@ -101,7 +106,8 @@ public class ConvexHull {
     		
     		//Punkt so machen, dass er im 3 Eck liegt. (Nicht jede stelle gleichwahrscheinlich...)
     		double x = r.nextDouble() * 90; 
-    		double y = r.nextDouble() * (90-x);
+    		double y = r.nextDouble() * (90-x); //Da Steigung von -1 -> Linear: y = (-1) * x + 90 bei Verschiebung
+												//des Dreiecks auf den Koordinatenursprung für Beträge der Seiten
     		
     		points[i] = new Point(2, 10 + x, 10 + y); 
     	}

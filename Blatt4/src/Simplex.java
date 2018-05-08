@@ -10,7 +10,7 @@ public abstract class Simplex {
      */
     Simplex(int dimension, Point... points) {
         if (points.length != dimension + 1)
-            throw new IllegalArgumentException("Trying to initiate Simplex of dimension " + dimension + " with the wrong number of points");
+            throw new IllegalArgumentException("Trying to create Simplex of dimension " + dimension + " with the wrong number of points");
         this.dimension = dimension;
         this.points = points;
     }
@@ -32,19 +32,11 @@ public abstract class Simplex {
         Distance d = new EuclidDistance();
         double perimeter = 0;
 
-        //Da dimension + 1 Punkte vorhanden ist dimension der letzte Index von points[]
-        //--> Erfuellt da Konstruktor prüft
-        //for (int i = 0; i < dimension; i++) {
-        //    perimeter += d.distance(points[i], points[i + 1]);
-        //}
-        
-        
         //Laueft durch alle Kanten, aber nicht doppelt!
         for (int i = 0; i <= dimension; i++)
-        for (int j = i; j <= dimension; j++)
-        {
-        	perimeter += d.distance(points[i], points[j]);
-        }
+            for (int j = i; j <= dimension; j++) {
+                perimeter += d.distance(points[i], points[j]);
+            }
 
         return perimeter;
     }

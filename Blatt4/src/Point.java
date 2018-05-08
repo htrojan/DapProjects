@@ -10,7 +10,7 @@ public class Point {
     }
 
     /**
-     * Dient nur zum Klasseninternen Aufruf, den du ordentlich verhauen hast in minus()
+     * Dient nur zum Klasseninternen Aufruf
      */
     private Point(int dimension) {
         this.dimension = dimension;
@@ -70,7 +70,7 @@ public class Point {
      */
     public Point minus(Point p) {
         if (p.dimension != this.dimension)
-            throw new IllegalArgumentException("Can not calculate scalar between points with different dimensions");
+            throw new IllegalArgumentException("Can not subtract vectors between points with different dimensions");
 
         Point result = new Point(dimension);
 
