@@ -11,7 +11,7 @@ public class ConvexHull {
         for (Point p1 : points)
         for (Point p2 : points){ 
         	
-        	//Nur verschiedene Punkte
+        	//Nur verschied°ene Punkte
         	if(p1 == p2)
         		continue;
         	
