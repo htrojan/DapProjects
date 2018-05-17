@@ -6,28 +6,42 @@ public class Quicksort {
     public static void quicksort(int[] A, int l , int r) {
         int i = 0, j= 0;
 
+        //Sortiert korrekt wenn für 2 oder 3 aneinanderliegende Elemente aufgerufen
         if (l < r) {
+            //Nur aufrufen wenn die Grenzen korrekt sind
             i = l;
             j = r;
-            int pivot = A[(l + r) / 2];
+            int pivot = A[(l + r) / 2]; //Mittleres als Vergleichselement
+
+            //Nur solange die Elemente links nicht größer sind als die rechten
             while (i <= j) {
+                //Von links an das erste Element größer als pivot annähern
                 while (A[i] < pivot) {
                     i++;
                 }
+                //Von rechts an das erste Element kleiner als pivot annähern
                 while (A[j] > pivot) {
                     j--;
                 }
 
+                //Nur tauschen wenn das größere Element links vom kleineren steht
+                //-->
                 if (i <= j) {
                     int tmp = A[i];
                     A[i] = A[j];
                     A[j] = tmp;
-                    i++;
+                    i++; //Sonst gleiche Elemente nochmal
                     j--;
                 }
             }
 
+            //Wenn Teilarray zu Ende sortiert kann j< 0 der i >= A.length eintreten (An den äußeren Enden)
+            assert(j < 0 || i>= A.length || A[j] <= A[i]);
+            //Auf dem Intervall l bis zum gerade nach rechts getauschten Aufrufen
+            //Alle Elemente auf Intervall garantiert kleiner (gleich) als Pivot
             quicksort(A, l, j);
+            //Auf dem Intervall i (das Gerade nach links getauschte) bis zur rechten Grenze aufrufen
+            //Alle Elemente auf Interavall garantiert größer (gleich) als Pivot
             quicksort(A, i, r);
         }
 
