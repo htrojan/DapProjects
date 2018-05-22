@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group 'DapProjects'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+
+sourceSets {
+    main.java {
+        srcDirs = ["src"]
+    }
+
+    main.resources {
+        srcDirs = ["resources"]
+    }
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
