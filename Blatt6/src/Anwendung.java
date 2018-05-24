@@ -15,6 +15,7 @@ public class Anwendung {
      */
     public static ArrayList<Interval> intervalScheduling(ArrayList<Interval> intervals) {
 
+        assert (sortedForIntervalEnd(intervals));
         ArrayList<Interval> result = new ArrayList<>();
         result.add(intervals.get(0)); //Das erste Element ist automatisch das mit dem schnellsten Ende, da sortiert
 
@@ -34,11 +35,22 @@ public class Anwendung {
         return result;
     }
 
+    private static boolean sortedForIntervalEnd(ArrayList<Interval> intervals){
+        for (int i = 0; i < intervals.size() - 1; i++) {
+            if(intervals.get(i+1).getEnd() < intervals.get(i).getEnd())
+                return false;
+        }
+
+        return true;
+    }
+
     /**
      * @param jobs sortiert nach der Deadline.
      * @return Die Startzeitpunkte der Jobs aus dem Eingabearray
      */
     public static int[] latenessScheduling(ArrayList<Job> jobs) {
+        assert (sortedForDeadline(jobs));
+
         int startzeit = 0;
         int[] result = new int[jobs.size()];
 
@@ -49,6 +61,15 @@ public class Anwendung {
         }
 
         return result;
+    }
+
+    //Selbsterklärend
+    private static boolean sortedForDeadline(ArrayList<Job> jobs){
+        for (int i = 0; i < jobs.size() -1; i++) {
+            if(jobs.get(i+1).getDeadline() < jobs.get(i).getDeadline())
+                return false;
+        }
+        return true;
     }
 
 
@@ -132,6 +153,10 @@ public class Anwendung {
         int[] startTimes = latenessScheduling(jobs);
         System.out.println("Berechnetes Latenessscheduling");
         System.out.println("[" + Arrays.toString(startTimes) + "]");
+
+
+        System.out.println("Maximale Verspätung:");
+        System.out.println(maximumLateness(jobs, startTimes));
     }
 
     private static void printIntervalScheduling(ArrayList<Interval> intervals) {
@@ -145,6 +170,20 @@ public class Anwendung {
 
         System.out.println("Berechnetes Scheduling:");
         System.out.println("[" + Arrays.toString(scheduled.toArray()) + "]\n");
+
+    }
+
+    private static int maximumLateness(ArrayList<Job> jobs, int[] schedule){
+        int result = 0;
+
+        for (int i = 0; i < jobs.size(); i++) {
+            //gewollte Deadline - reale Deadline = maximale Verspätun
+            int current = schedule[i] - jobs.get(i).getDeadline() + jobs.get(i).getDuration();
+            if (current > result){
+                result = current;
+            }
+        }
+        return result;
     }
 
     private static void printUsage() {

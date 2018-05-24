@@ -11,6 +11,11 @@ public class Job {
     }
 
     public Job(int duration, int deadline) {
+
+        if (duration > deadline) {
+            throw new IllegalArgumentException("The duration itself lies beyond the deadline");
+        }
+        
         this.duration = duration;
         this.deadline = deadline;
     }
