@@ -1,4 +1,3 @@
-import com.sun.deploy.panel.ITreeNode;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -11,6 +10,7 @@ public class Lcs {
 
         int[][] result = new int[l][m];
 
+        //Randwerte initialisieren
         for (int i = 0; i < l; i++) {
             result[i][0] = 0;
         }
@@ -18,6 +18,7 @@ public class Lcs {
             result[0][i] = 0;
         }
 
+        //Tabelle füllen
         for (int i = 1; i < l; i++) {
             for (int j = 1; j < m; j++) {
                 CalculateOptimalLength(a, b, result, i, j);
@@ -29,8 +30,10 @@ public class Lcs {
 
     private static void CalculateOptimalLength(String a, String b, int[][] result, int i, int j) {
         if (a.charAt(i - 1) == b.charAt(j - 1)) { //Hier muss -1 hin, da vorher +1 für die Nullspalten genommen wurde
+            //Teil der optimalen Lsg
             result[i][j] = result[i - 1][j - 1] + 1; //Da wenn letzte beiden gleich immer zur optimalen Lsg
         } else if (result[i - 1][j] > result[i][j - 1]) {
+            //Maxim
             result[i][j] = result[i - 1][j];
         } else {
             result[i][j] = result[i][j - 1];
@@ -78,7 +81,7 @@ public class Lcs {
         System.out.println("Input:");
         System.out.println(string1);
         System.out.println(string2);
-        System.out.println("Longest subsequence: " + result[n][n]);
+        System.out.println("Longest subsequence: " + result[string1.length()][string2.length()]);
         System.out.println("Result: " + lcs);
 
     }
