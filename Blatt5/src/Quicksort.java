@@ -3,6 +3,12 @@ import java.util.Random;
 
 public class Quicksort {
 
+    /**
+     * Sortiert aufsteigend
+     * @param A Das zu sortierende Arrray
+     * @param l Der Anfangsindex
+     * @param r Der Endindex
+     */
     public static void quicksort(int[] A, int l , int r) {
         int i = 0, j= 0;
 
