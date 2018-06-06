@@ -1,6 +1,5 @@
 import java.util.Arrays;
 
-@SuppressWarnings("ALL")
 public class EditDistance {
     public static int distance(int[][] optimalField) {
         return optimalField[optimalField.length - 1][optimalField[0].length - 1];
@@ -128,6 +127,9 @@ public class EditDistance {
     public static void printEditOperations(int[][] optimalField, String s1, String s2) {
         OperationData[] operations = buildEditOperations(optimalField, s1, s2);
         char[] s = Arrays.copyOf(s1.toCharArray(), operations.length);
+        StringBuilder b = new StringBuilder();
+        b.append(s1);
+
 
         //Keeps track of the current index by counting adds and removes
         int offset = 0;
@@ -137,36 +139,26 @@ public class EditDistance {
             int j = op.j -1;
             switch (op.op) {
                 case Add:
+                    //Increment offset before output as the string has an additional char afterwards. "Position" refers to the newly added position
                     ++offset;
-                    addAtIndex(s, ++i, s2.charAt(op.j));
-                    System.out.println("Kosten 1: Füge " + s2.charAt(j) + " an Position " + (op.i + offset) + " ein --> " + new String(s));
+                    b.insert(i + offset, s2.charAt(j));
+                    System.out.println("Kosten 1: Füge " + s2.charAt(j) + " an Position " + (op.i + offset) + " ein --> " + b.toString());
                     break;
                 case Remove:
+                    b.deleteCharAt(i);
+                    System.out.println("Kosten 1: Lösche " + s1.charAt(i) + " an Position " + (op.i + offset) + " --> " + b.toString());
+                    //Decrement offset after output as "Position" refers to the old position
                     --offset;
-                    removeAtIndex(s, i);
-                    System.out.println("Kosten 1: Lösche " + s1.charAt(i) + " an Position " + (op.i + offset) + " ein --> " + new String(s));
                     break;
                 case Replace:
-                    s[i] = s2.charAt(j);
-                    System.out.println("Kosten 1: Ersetze " + s1.charAt(i) + " durch " + s2.charAt(j) + " an Position " + (op.i + offset) + " --> " + new String(s));
+                    b.setCharAt(i + offset, s2.charAt(j));
+                    System.out.println("Kosten 1: Ersetze " + s1.charAt(i) + " durch " + s2.charAt(j) + " an Position " + (op.i + offset) + " --> " + b.toString());
                     break;
                 case Nothing:
-                    System.out.println("Kosten 0: " + s1.charAt(i) + " an Position " + (op.i + offset) + " --> " + new String(s));
+                    System.out.println("Kosten 0: " + s1.charAt(i) + " an Position " + (op.i + offset) + " --> " + b.toString());
                     break;
             }
         }
-    }
-
-    private static void removeAtIndex(char[] c, int index) {
-        //copies all following indices one to the left to overwrite the deleted element
-        System.arraycopy(c, index + 1, c, index, c.length - 1 - index);
-        c[c.length-1] = '\0';
-    }
-
-    private static void addAtIndex(char[] c, int index, char ch) {
-        //copies all following indices one to the right to make place for the new character
-        System.arraycopy(c, index, c, index + 1, c.length - index -1);
-        c[index] = ch;
     }
 
     private static class OperationData {
