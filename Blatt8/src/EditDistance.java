@@ -1,6 +1,7 @@
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
-@SuppressWarnings("ALL")
 public class EditDistance {
     public static int distance(int[][] optimalField) {
         return optimalField[optimalField.length - 1][optimalField[0].length - 1];
@@ -30,13 +31,13 @@ public class EditDistance {
                 int m2 = field[i - 1][j]; //Remove
                 int m3 = field[i][j - 1]; //Add
 
-                int mg = min(m1, m2, m3) + 1;
+                int m123 = min(m1, m2, m3) + 1;
 
                 if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
                     int m4 = field[i - 1][j - 1];
-                    field[i][j] = min(mg, m4);
+                    field[i][j] = min(m123, m4);
                 } else {
-                    field[i][j] = mg;
+                    field[i][j] = m123;
                 }
 
             }
@@ -45,10 +46,21 @@ public class EditDistance {
     }
 
     public static void main(String[] args) {
-        if (args.length != 2) {
-            System.out.println("Please use: EditDistance string1 string2");
+        if (args.length < 2 || args.length > 3) {
+            printUsage();
             return;
         }
+
+        boolean printOperations = false;
+
+        if (args.length == 3)
+            if (args[2].equals("-o")) {
+                printOperations = true;
+            } else {
+                System.out.println("Third parameter must be empty or -o");
+                printUsage();
+                return;
+            }
 
         String s1 = args[0];
         String s2 = args[1];
@@ -57,9 +69,16 @@ public class EditDistance {
 
         System.out.println("String1 = " + s1);
         System.out.println("String2 = " + s2);
-        System.out.println("Distance = " + distance(result));
+        System.out.println("Distance = " + distance(result) + "\n");
 
-        printEditOperations(result, s1, s2);
+        if (printOperations)
+            printEditOperations(result, s1, s2);
+
+
+    }
+
+    private static void printUsage() {
+        System.out.println("Please use: EditDistance string1 string2 [-o]");
     }
 
     /**
@@ -67,24 +86,18 @@ public class EditDistance {
      *
      * @param optimalField Precalculated optimal field
      */
-    private static OperationData[] buildEditOperations(int[][] optimalField, String s1, String s2) {
-        int i = s1.length() ;
-        int j = s2.length() ;
+    private static List<OperationData> buildEditOperations(int[][] optimalField, String s1, String s2) {
+        int i = s1.length();
+        int j = s2.length();
 
-        int length = optimalField[i][j];
-
-        //Max operations are given through the max length of the strings
-        int operationLength = max(s1.length(), s2.length());
         //The field where the necessary operations are stored
-        OperationData[] op = new OperationData[operationLength];
-        //Index variable for op
-        int k = operationLength - 1;
+        LinkedList<OperationData> op = new LinkedList<>();
 
 
-        while (i > 0 || j > 0) {
+        while (i > 0 && j > 0) {
             //Nothing happened
-            if (s1.charAt(i -1) == s2.charAt(j -1)) {
-                op[k--] = new OperationData(Operations.Nothing, i, j);
+            if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                op.addFirst(new OperationData(Operations.Nothing, i, j));
                 --i;
                 --j;
             } else {
@@ -92,83 +105,77 @@ public class EditDistance {
                 int m2 = optimalField[i - 1][j]; //Remove
                 int m3 = optimalField[i][j - 1]; //Add
 
+                //Search for the minimum
                 if (m1 <= m2 && m1 <= m3) {
-                    op[k--] = new OperationData(Operations.Replace, i, j);
+                    op.addFirst(new OperationData(Operations.Replace, i, j));
                     --i;
                     --j;
                 } else if (m2 <= m1 && m2 <= m3) {
-                    op[k--] = new OperationData(Operations.Remove, i, j);
+                    op.addFirst(new OperationData(Operations.Remove, i, j));
                     --i;
                 } else {
-                    op[k--] = new OperationData(Operations.Add, i, j);
+                    op.addFirst(new OperationData(Operations.Add, i, j));
                     --j;
                 }
             }
         }
 
-        //Now continue counting j or i down to 1
+        //Now continue counting j or i down to 1 as the end has to be at (1, 1)
 
         while (i > 0) {
-            op[k--] = new OperationData(Operations.Remove, i--, j);
+            op.addFirst(new OperationData(Operations.Remove, i--, j));
         }
 
         while (j > 0) {
-            op[k--] = new OperationData(Operations.Add, i, j--);
+            op.addFirst(new OperationData(Operations.Add, i, j--));
         }
         return op;
     }
 
-    private static int max(int i1, int i2) {
-        if (i1 > i2)
-            return i1;
-        else
-            return i2;
-    }
 
     public static void printEditOperations(int[][] optimalField, String s1, String s2) {
-        OperationData[] operations = buildEditOperations(optimalField, s1, s2);
-        char[] s = Arrays.copyOf(s1.toCharArray(), operations.length);
+        List<OperationData> operations = buildEditOperations(optimalField, s1, s2);
+
+        //At least as many operations as steps required to manipulate s1
+        assert (operations.size() >= optimalField[s1.length()][s2.length()]);
+
+        StringBuilder b = new StringBuilder(s1);
 
         //Keeps track of the current index by counting adds and removes
         int offset = 0;
 
+        System.out.println("Lösung für \"" + s1 + "\" --> \"" + s2 + "\" mit Gesamtkosten " + optimalField[s1.length()][s2.length()] + ":\n");
         for (OperationData op : operations) {
-            int i =  op.i -1;
-            int j = op.j -1;
+            int i = op.i - 1;
+            int j = op.j - 1;
+            int off = i + offset;
             switch (op.op) {
                 case Add:
+                    //Increment offset as the string has an additional char afterwards. "Position" refers to the newly added position
+                    b.insert(off + 1, s2.charAt(j));
+                    System.out.println("Kosten 1: Füge " + s2.charAt(j) + " an Position " + (off + 1) + " ein --> " + b.toString());
                     ++offset;
-                    addAtIndex(s, ++i, s2.charAt(op.j));
-                    System.out.println("Kosten 1: Füge " + s2.charAt(j) + " an Position " + (op.i + offset) + " ein --> " + new String(s));
                     break;
                 case Remove:
+                    b.deleteCharAt(off);
+                    System.out.println("Kosten 1: Lösche " + s1.charAt(i) + " an Position " + (off + 1) + " --> " + b.toString());
+                    //Decrement offset after output as "Position" refers to the old position
                     --offset;
-                    removeAtIndex(s, i);
-                    System.out.println("Kosten 1: Lösche " + s1.charAt(i) + " an Position " + (op.i + offset) + " ein --> " + new String(s));
                     break;
                 case Replace:
-                    s[i] = s2.charAt(j);
-                    System.out.println("Kosten 1: Ersetze " + s1.charAt(i) + " durch " + s2.charAt(j) + " an Position " + (op.i + offset) + " --> " + new String(s));
+                    b.setCharAt(off, s2.charAt(j));
+                    System.out.println("Kosten 1: Ersetze " + s1.charAt(i) + " durch " + s2.charAt(j) + " an Position " + (off + 1) + " --> " + b.toString());
                     break;
                 case Nothing:
-                    System.out.println("Kosten 0: " + s1.charAt(i) + " an Position " + (op.i + offset) + " --> " + new String(s));
+                    System.out.println("Kosten 0: " + s1.charAt(i) + " an Position " + (off + 1) + " --> " + b.toString());
                     break;
             }
         }
     }
 
-    private static void removeAtIndex(char[] c, int index) {
-        //copies all following indices one to the left to overwrite the deleted element
-        System.arraycopy(c, index + 1, c, index, c.length - 1 - index);
-        c[c.length-1] = '\0';
-    }
-
-    private static void addAtIndex(char[] c, int index, char ch) {
-        //copies all following indices one to the right to make place for the new character
-        System.arraycopy(c, index, c, index + 1, c.length - index -1);
-        c[index] = ch;
-    }
-
+    /**
+     * Stores the indices and the type of an operation
+     */
     private static class OperationData {
         Operations op;
         int i;

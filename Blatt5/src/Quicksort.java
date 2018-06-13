@@ -10,7 +10,7 @@ public class Quicksort {
      * @param r Der Endindex
      */
     public static void quicksort(int[] A, int l , int r) {
-        int i = 0, j= 0;
+        int i, j;
 
         //Sortiert korrekt wenn für 2 oder 3 aneinanderliegende Elemente aufgerufen
         if (l < r) {
