@@ -1,3 +1,5 @@
+import java.security.PublicKey;
+
 public class Article {
     public int value, weight;
 
@@ -12,5 +14,10 @@ public class Article {
 
         this.value = value;
         this.weight = weight;
+
+    }
+
+    public double getRatio() {
+        return value/weight;
     }
 }

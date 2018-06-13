@@ -1,4 +1,6 @@
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Random;
 
 public class BackPack {
@@ -50,6 +52,9 @@ public class BackPack {
         int maxValue = maxValue(articles, w);
 
         System.out.println("Maximale Value: " + maxValue);
+
+        System.out.println("Mit Greedy: ");
+        System.out.println("Maximum: " + greedyMaxValue(articles, w));
     }
 
     /**
@@ -105,6 +110,21 @@ public class BackPack {
         }
 
         return field[art.length][weightLimit];
+    }
+
+    static int greedyMaxValue(Article[] art, int weightLimit) {
+        Arrays.sort(art, Comparator.comparingDouble(Article::getRatio));
+
+        int i = art.length -1 ;
+        int value = 0;
+
+        while (i >= 0 && weightLimit >= art[i].weight) {
+            weightLimit -= art[i].weight;
+            value += art[i].value;
+            i--;
+        }
+
+        return value;
     }
 
     static int max(int i1, int i2) {
