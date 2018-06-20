@@ -2,7 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="Blatt9_test" target="1.8" />
+      <module name="Blatt10_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
