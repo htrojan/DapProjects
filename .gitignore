@@ -143,3 +143,4 @@ hs_err_pid*
 .idea/modules/
 .idea/vcs.xml
 !/gradle/wrapper/gradle-wrapper.jar
+!/Blatt11/build.gradle
