@@ -90,11 +90,11 @@ public class Heap {
         //Wurzel durch letztes Element ersetzen
         keys[0] = keys[--fillCount]; //fillCount wird gleichzeitig erniedrigt, da das letzte Element entfernt wird
         heapify(0);
-        return 0;
+        return max;
     }
 
     public void printHeap() {
-        int maxColumn = 1;
+        int maxColumn = 2;
 
         for (int i = 1; i <= fillCount; i++) {
             if (i == maxColumn) {
@@ -104,6 +104,8 @@ public class Heap {
 
             System.out.print(keys[i - 1] + "  ");
         }
+
+        System.out.println();
     }
 
     /**
