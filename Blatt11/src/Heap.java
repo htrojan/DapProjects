@@ -26,7 +26,7 @@ public class Heap {
     }
 
     /**
-     * Stellt rekursiv von unten nach oben Heapeigenschaft wieder her
+     * Stellt rekursiv von oben nach unten Heapeigenschaft wieder her
      *
      * @param i
      */
@@ -38,7 +38,7 @@ public class Heap {
         int lc = left(i);
         int rc = right(i);
 
-        int max = 0;
+        int max;
 
         if (lc >= fillCount) { //Hat keine Kinder, Blatt --> Rekursiv bis nach oben aufrufen
             heapify(parent(i));
@@ -55,10 +55,12 @@ public class Heap {
         }
 
         //Das Maximum "hochtauschen" auf aktuelle Position falls größer als aktueller Wert
-        if (keys[i] < keys[max])
+        if (keys[i] < keys[max]) {
             swap(i, max);
-        heapify(parent(i));
-
+            //Rekursiv auf dem Index mit der nun alten Wurzel aufrufen
+            heapify(max);
+        }
+        //Nur weiter machen wenn vorher getauscht werden musste
     }
 
     public void insert(int key) {
@@ -67,15 +69,28 @@ public class Heap {
         }
 
         keys[fillCount++] = key; //Schon hier hochzählen, da heapify() einen aktuellen Wert braucht
-        heapify(fillCount - 1);
+        //Hochtauschen
+        int i = fillCount - 1;
+
+        //Von unten nach oben durchgehen
+        while (i > 0 && keys[parent(i)] < keys[i]) {
+            swap(parent(i), i); //Ist größer
+            i = parent(i);
+        }
+
     }
 
     public int extractMax() {
         if (fillCount < 1) {
             new IllegalStateException("Heap needs entries to extract maximum");
         }
-        //Maximum steht immer oben
-        return keys[0];
+        //Maximum steht immer oben --> Zwischenspeichern
+        int max = keys[0];
+
+        //Wurzel durch letztes Element ersetzen
+        keys[0] = keys[--fillCount]; //fillCount wird gleichzeitig erniedrigt, da das letzte Element entfernt wird
+        heapify(0);
+        return 0;
     }
 
     public void printHeap() {

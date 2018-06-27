@@ -10,5 +10,9 @@ public class TestHeap {
             System.out.println("\n");
             heap.printHeap();
         }
+
+        System.out.println("\nExtract max");
+        heap.extractMax();
+        heap.printHeap();
     }
 }
