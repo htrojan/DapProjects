@@ -1,2 +1,2 @@
 # DapProjects
-Blatt2 bis zum 27.4
+Projects for DAP2 (Datastructures, Algorithms, Programming) course
